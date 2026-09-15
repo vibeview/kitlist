@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "Kitlist",
+    "slug": "kitlist",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "kitlist",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#FAF9F5",
+    "ios": {
+      "bundleIdentifier": "io.vibeview.kitlist",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "io.vibeview.kitlist",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6602A",
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "monochromeImage": "./assets/adaptive-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#FAF9F5"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
