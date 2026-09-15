@@ -6,6 +6,14 @@ off as they go in the bag, and see at a glance what is still left.
 No account, no server, no permissions, no network: everything lives on the
 device.
 
+**This is a deliberately small sample app.** It exists to show a complete,
+working VibeView setup for an Expo project: cloud builds, device verification
+by a coding agent, signing, and store submission. Read the story of how it was
+built and shipped, with every command and output, in
+[An AI agent shipped an Expo app to TestFlight in 43 minutes](https://vibeview.io/guides/ai-agent-shipped-expo-app-to-testflight/).
+Copy the `vibeview.json` and the two config plugins into your own project; do
+not expect much from the app itself.
+
 Kitlist was built, verified on live iOS and Android devices, signed and
 submitted to TestFlight and Google Play by a coding agent, using only the
 [VibeView](https://vibeview.io) CLI for everything native. No Xcode or Android
