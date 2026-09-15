@@ -1,0 +1,21 @@
+{
+  "defaultPlatform": "ios",
+  "metroPort": 8081,
+  "metroCommand": "npx expo start",
+  "platforms": {
+    "ios": {
+      "deviceCategory": "phone",
+      "build": {
+        "command": "npm ci && npx expo prebuild --platform ios && xcodebuild -workspace ios/Kitlist.xcworkspace -scheme Kitlist -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO",
+        "artifact": "ios/build/Build/Products/Debug-iphonesimulator/*.app"
+      }
+    },
+    "android": {
+      "deviceCategory": "phone",
+      "build": {
+        "command": "npm ci && npx expo prebuild --platform android --no-install && cd android && ./gradlew assembleDebug",
+        "artifact": "android/app/build/outputs/apk/debug/*.apk"
+      }
+    }
+  }
+}
