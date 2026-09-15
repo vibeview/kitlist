@@ -100,7 +100,7 @@ npx expo start &
 vibeview dev --detach --json --platform ios      # or android
 # → {"event":"session_ready","session_id":"…","url":"https://vibeview.io/sandbox/…"}
 
-# 3. Drive it. Every control has a testID; on iOS `find` resolves them.
+# 3. Drive it. Every control has a testID and `find` resolves them on both platforms.
 S=<session_id>
 vibeview ui-tree --session $S                     # refs like @e3 come from here
 vibeview find "trip.row.lisbon" --session $S      # → @e3 "Lisbon, long weekend, … 6 / 11"
@@ -122,8 +122,9 @@ vibeview screenshot --out check.png --session $S
 vibeview dev-stop
 ```
 
-On Android the tree does not expose testIDs, so navigate by the labels the
-tree prints instead of `find "<testID>"`.
+`find "<testID>"` resolves on Android as well as iOS: a React Native `testID`
+reaches the Android tree as the view's resource id, and VibeView matches it
+the same way it matches the iOS accessibility identifier.
 
 Accessibility ids: `trips.add`, `trip.row.<id>`, `trip.left`, `item.row.<id>`,
 `item.add`, `sheet.name`, `sheet.qty`, `sheet.date`, `sheet.nights`,
