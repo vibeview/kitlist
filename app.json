@@ -34,7 +34,9 @@
           "resizeMode": "contain",
           "backgroundColor": "#FAF9F5"
         }
-      ]
+      ],
+      "./plugins/withVibeViewSigning.js",
+      "./plugins/withVibeViewIosSigning.js"
     ],
     "experiments": {
       "typedRoutes": true

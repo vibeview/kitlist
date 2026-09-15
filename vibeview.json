@@ -4,20 +4,26 @@
   "metroCommand": "npx expo start",
   "platforms": {
     "ios": {
+      "appId": "kitlist-v0fzwwy9",
       "deviceCategory": "phone",
       "build": {
         "command": "npm ci && npx expo prebuild --platform ios && xcodebuild -workspace ios/Kitlist.xcworkspace -scheme Kitlist -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build CODE_SIGNING_ALLOWED=NO",
-        "artifact": "ios/build/Build/Products/Debug-iphonesimulator/*.app"
-      },
-      "appId": "kitlist-v0fzwwy9"
+        "artifact": "ios/build/Build/Products/Debug-iphonesimulator/*.app",
+        "productionCommand": "npm ci && npx expo prebuild --platform ios && xcodebuild archive -workspace ios/Kitlist.xcworkspace -scheme Kitlist -configuration Release -archivePath ios/build/Kitlist.xcarchive ${VIBEVIEW_CODE_SIGN_IDENTITY:+\"CODE_SIGN_IDENTITY=$VIBEVIEW_CODE_SIGN_IDENTITY\"} && xcodebuild -exportArchive -archivePath ios/build/Kitlist.xcarchive -exportPath ios/build -exportOptionsPlist \"$VIBEVIEW_EXPORT_OPTIONS_PLIST\"",
+        "productionArtifact": "ios/build/*.ipa",
+        "autoIncrement": true
+      }
     },
     "android": {
+      "appId": "kitlist-1ubmjj2b",
       "deviceCategory": "phone",
       "build": {
         "command": "npm ci && npx expo prebuild --platform android --no-install && cd android && ./gradlew assembleDebug",
-        "artifact": "android/app/build/outputs/apk/debug/*.apk"
-      },
-      "appId": "kitlist-1ubmjj2b"
+        "artifact": "android/app/build/outputs/apk/debug/*.apk",
+        "productionCommand": "npm ci && npx expo prebuild --platform android --no-install && cd android && ./gradlew bundleRelease",
+        "productionArtifact": "android/app/build/outputs/bundle/release/*.aab",
+        "autoIncrement": true
+      }
     }
   }
 }
