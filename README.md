@@ -42,6 +42,47 @@ Stack: Expo SDK 57 (managed workflow), TypeScript, Expo Router, AsyncStorage,
 system fonts. The generated `ios/` and `android/` directories are not checked
 in — `expo prebuild` recreates them for every build.
 
+## iPhone Duo
+
+Kitlist adapts to the iPhone Duo's two screens and its hinge:
+
+- **Closed (cover screen)** — one pane, as on any iPhone: the trips list,
+  then a trip's packing list with `‹ Trips`.
+- **Open or half open (inner screen)** — the trips list and the selected
+  trip's packing list side by side, or one above the other when the device is
+  turned. The two panes are exactly half the window each with a 40 pt gutter
+  in the middle, which is where the fold runs in either orientation, so no
+  text or control sits on the hinge. Sheets open inside their own pane.
+- **Folding and unfolding keep your place** — the selected trip lives in the
+  route, so closing the device mid-list shows that same trip on the cover
+  screen, and opening it again brings the list back beside it.
+- Safe-area insets are read per edge, because on the Duo the status bar and
+  camera run down one side of the screen.
+
+There is no hinge or fold API in React Native or Expo yet, so all of this
+comes from the window size (`useWindowDimensions`) — the same code gives
+iPad the two-pane layout. See `src/layout.ts` and
+`src/components/SplitView.tsx`.
+
+To get the full inner screen, build with Xcode 27.1 (iOS 27.1 SDK). Apps
+built with older Xcode versions run on the Duo in a phone-sized window and
+keep the one-pane layout. The iOS 27 SDK also requires the UIKit scene life
+cycle, which Expo SDK 57 enables through `expo-build-properties`
+(`ios.enableSceneSupport`, set in `app.json`).
+
+To try it on a cloud iPhone Duo (the session starts closed):
+
+```bash
+vibeview list-devices --models                    # "iPhone Duo  iOS 27.1 … foldable"
+vibeview dev --detach --json --platform ios --model "iPhone Duo"
+S=<session_id>
+vibeview set-posture open --session $S            # or partial, closed
+vibeview set-posture --angle 75 --session $S      # an exact hinge angle
+vibeview rotate --session $S                      # a quarter turn
+vibeview ui-tree --session $S                     # screen.trips + screen.trip side by side
+vibeview dev-stop
+```
+
 ## Running it
 
 ```bash
@@ -128,7 +169,8 @@ the same way it matches the iOS accessibility identifier.
 
 Accessibility ids: `trips.add`, `trip.row.<id>`, `trip.left`, `item.row.<id>`,
 `item.add`, `sheet.name`, `sheet.qty`, `sheet.date`, `sheet.nights`,
-`sheet.cat.<Category>`, `sheet.save`. Seed trip ids are `lisbon`, `tatras`,
+`sheet.cat.<Category>`, `sheet.save`, and for the layout `screen.trips`,
+`screen.trip` and `trip.none` (the empty right-hand pane). Seed trip ids are `lisbon`, `tatras`,
 `berlin`; item ids are the kebab-cased name (`swim-shorts`, `eu-plug-adapter`).
 
 ## Shipping
