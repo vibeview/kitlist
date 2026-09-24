@@ -5,17 +5,18 @@ import { Trip, formatStartDate, nightsLabel, packedCount } from '../model';
 import { colors, radius } from '../theme';
 import { ProgressBar } from './ProgressBar';
 
-type Props = { trip: Trip; onPress: () => void };
+type Props = { trip: Trip; selected?: boolean; onPress: () => void };
 
-export function TripRow({ trip, onPress }: Props) {
+export function TripRow({ trip, selected = false, onPress }: Props) {
   const packed = packedCount(trip);
   const total = trip.items.length;
   return (
     <Pressable
       testID={`trip.row.${trip.id}`}
       accessibilityRole="button"
+      accessibilityState={{ selected }}
       onPress={onPress}
-      style={({ pressed }) => [styles.card, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.card, selected && styles.selected, pressed && styles.pressed]}
     >
       <View style={styles.top}>
         <View style={styles.text}>
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     gap: 12,
   },
+  selected: { borderColor: colors.accent, borderWidth: 2, padding: 15 },
   pressed: { opacity: 0.9 },
   top: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
   text: { flex: 1, gap: 3 },

@@ -12,12 +12,21 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { HINGE_GUTTER, useLayout } from '../layout';
 import { CATEGORIES, Category, parseIsoDate, todayIso } from '../model';
 import { colors, radius } from '../theme';
 
+/** Which pane the sheet belongs to, when two panes are showing. */
+type Side = 'primary' | 'secondary';
+
 export type SheetConfig =
-  | { kind: 'item'; tripName: string; onSave: (v: { name: string; quantity: number; category: Category }) => void }
-  | { kind: 'trip'; onSave: (v: { name: string; startDate: string; nights: number }) => void };
+  | {
+      kind: 'item';
+      side: Side;
+      tripName: string;
+      onSave: (v: { name: string; quantity: number; category: Category }) => void;
+    }
+  | { kind: 'trip'; side: Side; onSave: (v: { name: string; startDate: string; nights: number }) => void };
 
 type Props = { config: SheetConfig | null; onClose: () => void };
 
@@ -25,9 +34,14 @@ type Props = { config: SheetConfig | null; onClose: () => void };
  * One bottom sheet, two shapes:
  *  - item: name, quantity (default 1), category chips, "Add to <trip>"
  *  - trip: name, start date, nights, "Create trip"
+ *
+ * With two panes the sheet stays inside its own half — the pane it was opened
+ * from when they are side by side, the bottom half when they are stacked — so
+ * it never lies across the fold of a half-open foldable.
  */
 export function Sheet({ config, onClose }: Props) {
   const insets = useSafeAreaInsets();
+  const { twoPane, direction, width, height } = useLayout();
   const [name, setName] = useState('');
   const [qty, setQty] = useState('1');
   const [category, setCategory] = useState<Category>('Other');
@@ -48,6 +62,16 @@ export function Sheet({ config, onClose }: Props) {
   }, [config]);
 
   if (!config) return null;
+
+  const half = twoPane && direction === 'row' ? config.side : null;
+  const placement = {
+    width: half ? (width - HINGE_GUTTER) / 2 : undefined,
+    alignSelf: half === 'primary' ? ('flex-start' as const) : half === 'secondary' ? ('flex-end' as const) : undefined,
+    maxHeight: twoPane && direction === 'column' ? (height - HINGE_GUTTER) / 2 : ('85%' as const),
+    paddingLeft: 20 + (half === 'secondary' ? 0 : insets.left),
+    paddingRight: 20 + (half === 'primary' ? 0 : insets.right),
+    paddingBottom: Math.max(insets.bottom, 16) + 8,
+  };
 
   const title = config.kind === 'item' ? 'Add item' : 'New trip';
   const saveLabel = config.kind === 'item' ? `Add to ${config.tripName}` : 'Create trip';
@@ -85,7 +109,7 @@ export function Sheet({ config, onClose }: Props) {
     <Modal visible transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Close" testID="sheet.backdrop" />
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.avoid} pointerEvents="box-none">
-        <View style={[styles.card, { paddingBottom: Math.max(insets.bottom, 16) + 8 }]} testID="sheet">
+        <View style={[styles.card, placement]} testID="sheet">
           <View style={styles.grabber} />
           <Text style={styles.title} accessibilityRole="header">
             {title}
@@ -210,9 +234,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     borderTopLeftRadius: radius.sheet,
     borderTopRightRadius: radius.sheet,
-    paddingHorizontal: 20,
     paddingTop: 10,
-    maxHeight: '85%',
   },
   grabber: { alignSelf: 'center', width: 36, height: 4, borderRadius: 2, backgroundColor: colors.line, marginBottom: 12 },
   title: { color: colors.ink, fontSize: 20, fontWeight: '700', marginBottom: 14 },
