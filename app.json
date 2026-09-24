@@ -10,7 +10,7 @@
     "backgroundColor": "#FAF9F5",
     "ios": {
       "bundleIdentifier": "io.vibeview.kitlist",
-      "supportsTablet": false,
+      "supportsTablet": true,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
