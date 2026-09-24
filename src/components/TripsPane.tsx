@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { usePaneInsets } from '../insets';
+import { useLayout } from '../layout';
 import { useStore } from '../store';
 import { colors } from '../theme';
-import { Fab, FAB_CLEARANCE } from './Fab';
+import { Fab } from './Fab';
 import { Header } from './Header';
 import { Sheet, SheetConfig } from './Sheet';
 import { TripRow } from './TripRow';
@@ -19,6 +20,9 @@ type Props = {
 export function TripsPane({ selectedId, onSelect }: Props) {
   const { ready, trips, addTrip } = useStore();
   const insets = usePaneInsets();
+  // Split layout: the + sits in the pane's header. A floating button in a
+  // short pane always ends up covering a row; one pane keeps the usual FAB.
+  const { twoPane } = useLayout();
   const [sheet, setSheet] = useState<SheetConfig | null>(null);
 
   function openNewTrip() {
@@ -31,7 +35,10 @@ export function TripsPane({ selectedId, onSelect }: Props) {
 
   return (
     <View style={[styles.screen, { paddingLeft: insets.left, paddingRight: insets.right }]} testID="screen.trips">
-      <Header title="Trips" />
+      <Header
+        title="Trips"
+        action={twoPane ? { testID: 'trips.add', label: 'New trip', onPress: openNewTrip } : undefined}
+      />
       {ready ? (
         <FlatList
           data={trips}
@@ -39,8 +46,7 @@ export function TripsPane({ selectedId, onSelect }: Props) {
           renderItem={({ item }) => (
             <TripRow trip={item} selected={item.id === selectedId} onPress={() => onSelect(item.id)} />
           )}
-          style={{ marginBottom: FAB_CLEARANCE + insets.bottom }}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={[styles.list, { paddingBottom: (twoPane ? 24 : 100) + insets.bottom }]}
           ListEmptyComponent={
             <Text style={styles.empty} testID="trips.empty">
               No trips yet. Tap + to plan one.
@@ -48,7 +54,7 @@ export function TripsPane({ selectedId, onSelect }: Props) {
           }
         />
       ) : null}
-      <Fab testID="trips.add" label="New trip" onPress={openNewTrip} />
+      {twoPane ? null : <Fab testID="trips.add" label="New trip" onPress={openNewTrip} />}
       <Sheet config={sheet} onClose={() => setSheet(null)} />
     </View>
   );
@@ -56,6 +62,6 @@ export function TripsPane({ selectedId, onSelect }: Props) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
-  list: { paddingTop: 4, paddingBottom: 8 },
+  list: { paddingTop: 4 },
   empty: { color: colors.inkSecondary, textAlign: 'center', marginTop: 48, paddingHorizontal: 40, fontSize: 15 },
 });

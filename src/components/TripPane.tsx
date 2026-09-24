@@ -2,10 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 
 import { usePaneInsets } from '../insets';
+import { useLayout } from '../layout';
 import { CATEGORIES, Item, leftToPack } from '../model';
 import { useStore, useTrip } from '../store';
 import { colors, radius } from '../theme';
-import { Fab, FAB_CLEARANCE } from './Fab';
+import { Fab } from './Fab';
 import { Header } from './Header';
 import { ItemRow } from './ItemRow';
 import { Sheet, SheetConfig } from './Sheet';
@@ -21,6 +22,9 @@ export function TripPane({ tripId, onBack }: Props) {
   const { ready, addItem, toggleItem } = useStore();
   const trip = useTrip(tripId);
   const insets = usePaneInsets();
+  // Split layout: the + sits in the pane's header. A floating button in a
+  // short pane always ends up covering a row; one pane keeps the usual FAB.
+  const { twoPane } = useLayout();
   const [sheet, setSheet] = useState<SheetConfig | null>(null);
 
   // Group by category in a fixed order; item order within a group is insertion
@@ -55,7 +59,13 @@ export function TripPane({ tripId, onBack }: Props) {
 
   return (
     <View style={[styles.screen, edges]} testID="screen.trip">
-      <Header title={trip.name} backLabel="Trips" onBack={onBack} backTestID="trip.back" />
+      <Header
+        title={trip.name}
+        backLabel="Trips"
+        onBack={onBack}
+        backTestID="trip.back"
+        action={twoPane ? { testID: 'item.add', label: 'Add item', onPress: openAddItem } : undefined}
+      />
       <SectionList<Item>
         sections={sections}
         keyExtractor={(item) => item.id}
@@ -86,10 +96,9 @@ export function TripPane({ tripId, onBack }: Props) {
             Nothing on the list yet. Tap + to add the first item.
           </Text>
         }
-        style={{ marginBottom: FAB_CLEARANCE + insets.bottom }}
-        contentContainerStyle={{ paddingBottom: 8 }}
+        contentContainerStyle={{ paddingBottom: (twoPane ? 24 : 100) + insets.bottom }}
       />
-      <Fab testID="item.add" label="Add item" onPress={openAddItem} />
+      {twoPane ? null : <Fab testID="item.add" label="Add item" onPress={openAddItem} />}
       <Sheet config={sheet} onClose={() => setSheet(null)} />
     </View>
   );
