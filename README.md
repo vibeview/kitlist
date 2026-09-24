@@ -46,6 +46,14 @@ in — `expo prebuild` recreates them for every build.
 
 Kitlist adapts to the iPhone Duo's two screens and its hinge:
 
+<p align="center">
+  <img src="docs/screenshots/duo-open-two-pane.png" alt="Kitlist on the iPhone Duo's inner screen: the trips list beside the Lisbon packing list, one on each side of the fold" width="100%">
+</p>
+<p align="center">
+  <img src="docs/screenshots/duo-open-rotated.png" alt="iPhone Duo open and turned: the trips list above the fold and the packing list below it" width="49%">
+  <img src="docs/screenshots/duo-closed-cover.png" alt="iPhone Duo closed: the cover screen shows the one-pane trips list" width="48%">
+</p>
+
 - **Closed (cover screen)** — one pane, as on any iPhone: the trips list,
   then a trip's packing list with `‹ Trips`.
 - **Open or half open (inner screen)** — the trips list and the selected
