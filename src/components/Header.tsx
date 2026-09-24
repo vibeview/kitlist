@@ -1,13 +1,13 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { usePaneInsets } from '../insets';
 import { colors } from '../theme';
 
 type Props = { title: string; backLabel?: string; onBack?: () => void; backTestID?: string };
 
 export function Header({ title, backLabel, onBack, backTestID }: Props) {
-  const insets = useSafeAreaInsets();
+  const insets = usePaneInsets();
   return (
     <View style={[styles.wrap, { paddingTop: insets.top + 8 }]}>
       {onBack ? (

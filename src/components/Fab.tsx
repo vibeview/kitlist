@@ -1,19 +1,21 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
+import { usePaneInsets } from '../insets';
 import { colors } from '../theme';
 
 type Props = { testID: string; label: string; onPress: () => void };
 
 /** Floating "+" button, bottom-right. */
 export function Fab({ testID, label, onPress }: Props) {
+  const insets = usePaneInsets();
   return (
     <Pressable
       testID={testID}
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      style={({ pressed }) => [styles.fab, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.fab, { bottom: 28 + insets.bottom }, pressed && styles.pressed]}
     >
       <Text style={styles.plus}>+</Text>
     </Pressable>
