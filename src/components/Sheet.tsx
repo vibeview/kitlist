@@ -114,7 +114,7 @@ export function Sheet({ config, onClose }: Props) {
           <Text style={styles.title} accessibilityRole="header">
             {title}
           </Text>
-          <ScrollView keyboardShouldPersistTaps="handled" bounces={false}>
+          <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled" bounces={false}>
             <Field label="Name">
               <TextInput
                 testID="sheet.name"
@@ -199,19 +199,21 @@ export function Sheet({ config, onClose }: Props) {
                 {error}
               </Text>
             ) : null}
-
-            <Pressable
-              testID="sheet.save"
-              accessibilityRole="button"
-              accessibilityLabel={saveLabel}
-              onPress={save}
-              style={({ pressed }) => [styles.save, pressed && styles.savePressed]}
-            >
-              <Text style={styles.saveText} numberOfLines={1}>
-                {saveLabel}
-              </Text>
-            </Pressable>
           </ScrollView>
+
+          {/* Outside the scroll view, so a short screen with the keyboard up
+              (a foldable's cover screen, a small phone) never hides it. */}
+          <Pressable
+            testID="sheet.save"
+            accessibilityRole="button"
+            accessibilityLabel={saveLabel}
+            onPress={save}
+            style={({ pressed }) => [styles.save, pressed && styles.savePressed]}
+          >
+            <Text style={styles.saveText} numberOfLines={1}>
+              {saveLabel}
+            </Text>
+          </Pressable>
         </View>
       </KeyboardAvoidingView>
     </Modal>
@@ -238,6 +240,7 @@ const styles = StyleSheet.create({
   },
   grabber: { alignSelf: 'center', width: 36, height: 4, borderRadius: 2, backgroundColor: colors.line, marginBottom: 12 },
   title: { color: colors.ink, fontSize: 20, fontWeight: '700', marginBottom: 14 },
+  scroll: { flexShrink: 1 },
   field: { marginBottom: 14 },
   flex: { flex: 1 },
   rowFields: { flexDirection: 'row', gap: 12 },
