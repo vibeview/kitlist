@@ -2,7 +2,7 @@
   "expo": {
     "name": "Kitlist",
     "slug": "kitlist",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "default",
     "scheme": "kitlist",
     "icon": "./assets/icon.png",
