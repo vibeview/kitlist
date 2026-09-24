@@ -35,6 +35,14 @@
           "backgroundColor": "#FAF9F5"
         }
       ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "enableSceneSupport": true
+          }
+        }
+      ],
       "./plugins/withVibeViewSigning.js",
       "./plugins/withVibeViewIosSigning.js"
     ],
