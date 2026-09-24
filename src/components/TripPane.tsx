@@ -5,7 +5,7 @@ import { usePaneInsets } from '../insets';
 import { CATEGORIES, Item, leftToPack } from '../model';
 import { useStore, useTrip } from '../store';
 import { colors, radius } from '../theme';
-import { Fab } from './Fab';
+import { Fab, FAB_CLEARANCE } from './Fab';
 import { Header } from './Header';
 import { ItemRow } from './ItemRow';
 import { Sheet, SheetConfig } from './Sheet';
@@ -86,7 +86,8 @@ export function TripPane({ tripId, onBack }: Props) {
             Nothing on the list yet. Tap + to add the first item.
           </Text>
         }
-        contentContainerStyle={{ paddingBottom: 100 + insets.bottom }}
+        style={{ marginBottom: FAB_CLEARANCE + insets.bottom }}
+        contentContainerStyle={{ paddingBottom: 8 }}
       />
       <Fab testID="item.add" label="Add item" onPress={openAddItem} />
       <Sheet config={sheet} onClose={() => setSheet(null)} />

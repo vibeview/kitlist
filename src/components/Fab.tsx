@@ -6,7 +6,17 @@ import { colors } from '../theme';
 
 type Props = { testID: string; label: string; onPress: () => void };
 
-/** Floating "+" button, bottom-right. */
+const SIZE = 56;
+const BOTTOM = 28;
+
+/**
+ * Space a list must leave free at the bottom of its pane (plus the pane's
+ * bottom inset) so the button never sits on top of a row: the button's
+ * offset, its height and a 12 pt gap above it.
+ */
+export const FAB_CLEARANCE = BOTTOM + SIZE + 12;
+
+/** Floating "+" button, bottom-right, below its pane's list (see FAB_CLEARANCE). */
 export function Fab({ testID, label, onPress }: Props) {
   const insets = usePaneInsets();
   return (
@@ -15,7 +25,7 @@ export function Fab({ testID, label, onPress }: Props) {
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      style={({ pressed }) => [styles.fab, { right: 20 + insets.right, bottom: 28 + insets.bottom }, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.fab, { right: 20 + insets.right, bottom: BOTTOM + insets.bottom }, pressed && styles.pressed]}
     >
       <Text style={styles.plus}>+</Text>
     </Pressable>
@@ -25,11 +35,9 @@ export function Fab({ testID, label, onPress }: Props) {
 const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
-    right: 20,
-    bottom: 28,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: SIZE,
+    height: SIZE,
+    borderRadius: SIZE / 2,
     backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',

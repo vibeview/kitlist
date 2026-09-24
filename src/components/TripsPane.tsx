@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { usePaneInsets } from '../insets';
 import { useStore } from '../store';
 import { colors } from '../theme';
-import { Fab } from './Fab';
+import { Fab, FAB_CLEARANCE } from './Fab';
 import { Header } from './Header';
 import { Sheet, SheetConfig } from './Sheet';
 import { TripRow } from './TripRow';
@@ -39,7 +39,8 @@ export function TripsPane({ selectedId, onSelect }: Props) {
           renderItem={({ item }) => (
             <TripRow trip={item} selected={item.id === selectedId} onPress={() => onSelect(item.id)} />
           )}
-          contentContainerStyle={[styles.list, { paddingBottom: 100 + insets.bottom }]}
+          style={{ marginBottom: FAB_CLEARANCE + insets.bottom }}
+          contentContainerStyle={styles.list}
           ListEmptyComponent={
             <Text style={styles.empty} testID="trips.empty">
               No trips yet. Tap + to plan one.
@@ -55,6 +56,6 @@ export function TripsPane({ selectedId, onSelect }: Props) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
-  list: { paddingTop: 4 },
+  list: { paddingTop: 4, paddingBottom: 8 },
   empty: { color: colors.inkSecondary, textAlign: 'center', marginTop: 48, paddingHorizontal: 40, fontSize: 15 },
 });

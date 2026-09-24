@@ -64,6 +64,9 @@ Kitlist adapts to the iPhone Duo's two screens and its hinge:
 - **Folding and unfolding keep your place** — the selected trip lives in the
   route, so closing the device mid-list shows that same trip on the cover
   screen, and opening it again brings the list back beside it.
+- Each pane's list stops above its `+` button, so the button never covers a
+  row, however short the pane (the top pane when the Duo is turned is only
+  about 450 pt tall).
 - Safe-area insets are read per edge, because on the Duo the status bar and
   camera run down one side of the screen.
 
