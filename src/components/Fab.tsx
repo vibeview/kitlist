@@ -15,7 +15,7 @@ export function Fab({ testID, label, onPress }: Props) {
       accessibilityRole="button"
       accessibilityLabel={label}
       onPress={onPress}
-      style={({ pressed }) => [styles.fab, { bottom: 28 + insets.bottom }, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.fab, { right: 20 + insets.right, bottom: 28 + insets.bottom }, pressed && styles.pressed]}
     >
       <Text style={styles.plus}>+</Text>
     </Pressable>
